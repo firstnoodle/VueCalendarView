@@ -1,15 +1,15 @@
 <template>
   <div id="app">
-    <ee-date-picker ref="datepicker" :value="date" :options="options" @change="onDateChange"/>
+    <date-picker ref="datepicker" :value="date" :options="options" @change="onDateChange"/>
   </div>
 </template>
 
 <script>
-import eeDatePicker from "./components/DatePicker/eeDatePicker.vue";
+import DatePicker from "./components/DatePicker.vue";
 
 export default {
   name: "App",
-  components: { eeDatePicker },
+  components: { DatePicker },
   data() {
     return {
       date: "2019-12-27",

@@ -1,5 +1,5 @@
 <template>
-  <div class="ee-date-picker">
+  <div class="date-picker">
     <table>
       <tbody>
         <tr>
@@ -51,7 +51,7 @@
 const loopRange = (index, length) => ((index % length) + length) % length;
 
 export default {
-  name: "eeDatePicker",
+  name: "DatePicker",
   props: {
     options: {
       type: Object
@@ -199,7 +199,7 @@ export default {
 <style lang="scss">
 $cellDimension: 40px;
 
-.ee-date-picker {
+.date-picker {
   & > table {
     border-collapse: collapse;
     border: none;
