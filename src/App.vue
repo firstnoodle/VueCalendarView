@@ -5,11 +5,12 @@
 </template>
 
 <script>
+import tempBackup from "./components/tempBackup.vue";
 import DatePicker from "./components/DatePicker.vue";
 
 export default {
   name: "App",
-  components: { DatePicker },
+  components: { "date-picker": DatePicker },
   data() {
     return {
       date: "2019-12-27",
