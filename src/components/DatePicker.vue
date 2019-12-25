@@ -6,10 +6,12 @@
 
 <script>
 import DatePage from "./DatePage.vue";
+import MonthPage from "./MonthPage.vue";
+import YearPage from "./YearPage.vue";
 
 export default {
   name: "DatePicker",
-  components: { DatePage },
+  components: { DatePage, MonthPage, YearPage },
   props: {
     options: {
       type: Object
@@ -131,7 +133,7 @@ export default {
       this.updateDateGrid();
     },
     onChangePage(value) {
-      console.log("page", value);
+      this.currentPage = value;
     },
     onChangeYear(value) {
       this.year += value;

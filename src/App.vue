@@ -5,7 +5,6 @@
 </template>
 
 <script>
-import tempBackup from "./components/tempBackup.vue";
 import DatePicker from "./components/DatePicker.vue";
 
 export default {

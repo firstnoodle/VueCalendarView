@@ -9,8 +9,8 @@
           <button @click="$emit('changeMonth', -1)">&lt;</button>
         </td>
         <td colspan="3">
-          <button @click="$emit('changePage', 'months')">{{ this.month }}</button>
-          <button @click="$emit('changePage', 'years')">{{ this.year }}</button>
+          <button @click="$emit('changePage', 'MonthPage')">{{ this.month }}</button>
+          <button @click="$emit('changePage', 'YearPage')">{{ this.year }}</button>
         </td>
         <td>
           <button @click="$emit('changeMonth', 1)">&gt;</button>
