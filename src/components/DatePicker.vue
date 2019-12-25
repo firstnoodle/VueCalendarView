@@ -23,7 +23,7 @@ export default {
   },
   data() {
     return {
-      currentPage: DatePage,
+      currentPage: MonthPage,
       dateGrid: [],
       month: null,
       months: [
@@ -55,9 +55,9 @@ export default {
       ],
       knownEvents: {
         changeDate: "onChangeDate",
-        changeMonth: "onChangeMonth",
         changePage: "onChangePage",
-        changeYear: "onChangeYear"
+        stepMonth: "onStepMonth",
+        stepYear: "onStepYear"
       }
     };
   },
@@ -92,6 +92,12 @@ export default {
           })
         };
       }
+      if (this.currentPage.name === MonthPage.name) {
+        return {};
+      }
+      if (this.currentPage.name === YearPage.name) {
+        return {};
+      }
     }
   },
   watch: {
@@ -119,7 +125,7 @@ export default {
     onChangeDate(value) {
       this.$emit("change", value);
     },
-    onChangeMonth(value) {
+    onStepMonth(value) {
       const previousMonth = this.month;
       this.month = this.loopRange(this.month + value, this.months.length);
       const deltaMonths = previousMonth - this.month;
@@ -135,7 +141,7 @@ export default {
     onChangePage(value) {
       this.currentPage = value;
     },
-    onChangeYear(value) {
+    onStepYear(value) {
       this.year += value;
       this.updateDateGrid();
     },

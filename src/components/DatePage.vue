@@ -3,20 +3,20 @@
     <tbody>
       <tr>
         <td>
-          <button @click="$emit('changeYear', -1)">&lt;&lt;</button>
+          <button @click="$emit('stepYear', -1)">&lt;&lt;</button>
         </td>
         <td>
-          <button @click="$emit('changeMonth', -1)">&lt;</button>
+          <button @click="$emit('stepMonth', -1)">&lt;</button>
         </td>
         <td colspan="3">
           <button @click="$emit('changePage', 'MonthPage')">{{ this.month }}</button>
           <button @click="$emit('changePage', 'YearPage')">{{ this.year }}</button>
         </td>
         <td>
-          <button @click="$emit('changeMonth', 1)">&gt;</button>
+          <button @click="$emit('stepMonth', 1)">&gt;</button>
         </td>
         <td>
-          <button @click="$emit('changeYear', 1)">&gt;&gt;</button>
+          <button @click="$emit('stepYear', 1)">&gt;&gt;</button>
         </td>
       </tr>
     </tbody>
