@@ -23,7 +23,7 @@ export default {
   },
   data() {
     return {
-      currentPage: MonthPage,
+      currentPage: DatePage,
       dateGrid: [],
       month: null,
       months: [
@@ -220,3 +220,74 @@ export default {
   }
 };
 </script>
+
+<style lang="scss">
+$cellDimension: 40;
+
+.date-picker {
+  &__page {
+    color: #555;
+    font-family: Roboto mono;
+    font-size: 12px;
+    font-weight: 400;
+  }
+
+  &__row {
+    height: $cellDimension + px;
+    width: $cellDimension * 7 + px;
+  }
+
+  &__col {
+    align-items: center;
+    display: inline-flex;
+    height: 100%;
+    justify-content: center;
+    width: $cellDimension + px;
+
+    & > span {
+      align-items: center;
+      cursor: pointer;
+      display: flex;
+      height: $cellDimension - 14 + px;
+      justify-content: center;
+      width: $cellDimension - 14 + px;
+
+      &.is-disabled {
+        background-color: #eee;
+        //border-bottom: 1px solid white;
+        color: #aaa;
+        cursor: not-allowed;
+        height: $cellDimension + px;
+        width: $cellDimension + px;
+      }
+
+      &.is-inactive {
+        color: #aaa;
+      }
+
+      &.is-selected {
+        background-color: red;
+        border-radius: 50%;
+        color: white;
+      }
+
+      &.is-today {
+        color: red;
+        font-weight: 700;
+
+        &.is-selected {
+          color: white;
+        }
+      }
+    }
+
+    &.span-2 {
+      width: $cellDimension * 2 + px;
+    }
+    &.span-3 {
+      width: $cellDimension * 3 + px;
+    }
+  }
+}
+</style>
+
