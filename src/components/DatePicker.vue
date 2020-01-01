@@ -209,22 +209,18 @@ export default {
       this.dateGrid = [];
 
       // populate grid
-      for (let row = 0; row < 6; row++) {
-        this.dateGrid.push([]);
-        for (let col = 0; col < 7; col++) {
-          this.dateGrid[row].push({
-            label: dateCursor.date(),
-            date: dateCursor.format(),
-            disabled: this.options.disabledDate
-              ? this.options.disabledDate(dateCursor)
-              : false,
-            inactive: dateCursor.month() !== this.month,
-            selected: dateCursor.isSame(this.selectedDate, "day"),
-            today: dateCursor.isSame(this.today, "day")
-          });
-
-          dateCursor.add(1, "days");
-        }
+      for (let row = 0; row < 42; row++) {
+        this.dateGrid.push({
+          label: dateCursor.date(),
+          date: dateCursor.format(),
+          disabled: this.options.disabledDate
+            ? this.options.disabledDate(dateCursor)
+            : false,
+          inactive: dateCursor.month() !== this.month,
+          selected: dateCursor.isSame(this.selectedDate, "day"),
+          today: dateCursor.isSame(this.today, "day")
+        });
+        dateCursor.add(1, "days");
       }
     }
   }
@@ -240,17 +236,13 @@ $cellDimension: 40;
     font-family: Roboto mono;
     font-size: 12px;
     font-weight: 400;
-  }
-
-  &__row {
-    height: $cellDimension + px;
     width: $cellDimension * 7 + px;
   }
 
-  &__col {
+  &__cell {
     align-items: center;
     display: inline-flex;
-    height: 100%;
+    height: $cellDimension + px;
     justify-content: center;
     width: $cellDimension + px;
 

@@ -5,7 +5,7 @@ UX wise it is heavily inspired by the element-ui datepicker.
 
 #### TODO
 
-- [ ] UpdateGrid should not rely on selectedDate
+- [x] UpdateGrid should not rely on selectedDate
 - [ ] Handle MoveRequest on page with no selectedDate
 - [ ] Style buttons
 - [ ] Month view
