@@ -7,18 +7,20 @@ UX wise it is heavily inspired by the element-ui datepicker.
 
 - [x] UpdateGrid should not rely on selectedDate
 - [ ] Move updateGrid inside DatePage
-- [ ] Create updateGrid for MonthPage
-  - [ ] Highlight current month and selected month
-  - [ ] Disable months..?
+- [ ] Month view
+  - [x] Layout
+  - [ ] Navigation
+  - [ ] MoveRequest
+  - [ ] Create updateGrid for MonthPage
+    - [ ] Highlight current month and selected month
+    - [ ] Disable months..?
+- [ ] Year view
+  - [ ] Layout
+  - [ ] Navigation
+  - [ ] MoveRequest
 - [ ] Handle MoveRequest on page with no selectedDate
 - [ ] Style buttons
-- [ ] Month view
-  - [ ] Navigation
-  - [ ] MoveRequest
-- [ ] Year view
-  - [ ] Navigation
-  - [ ] MoveRequest
-- [ ] Refactor scss
+- [x] Refactor scss
 - [ ] Connect with input
   - [ ] Implement popper
   - [ ] Implement arrow keys navigation
