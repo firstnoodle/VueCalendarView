@@ -1,71 +1,86 @@
 <template>
-  <table class="month-page">
-    <tbody>
-      <tr>
-        <td colspan="1">
+  <div class="date-picker__page">
+    <nav>
+      <div class="date-picker__row">
+        <div class="date-picker__col">
           <button @click="$emit('stepYear', -1)">&lt;&lt;</button>
-        </td>
-        <td colspan="1">Year</td>
-        <td colspan="1">Year</td>
-        <td colspan="1">
+        </div>
+        <div class="date-picker__col span-5">{{ year }}</div>
+        <div class="date-picker__col">
           <button @click="$emit('stepYear', 1)">&gt;&gt;</button>
-        </td>
-      </tr>
-      <tr>
-        <td colspan="2">
+        </div>
+      </div>
+    </nav>
+    <main>
+      <div class="date-picker__row">
+        <div class="date-picker__col span-3-5">
           <span @click="$emit('changeMonth', 0)">January</span>
-        </td>
-        <td colspan="2">
+        </div>
+        <div class="date-picker__col span-3-5">
           <span @click="$emit('changeMonth', 1)">February</span>
-        </td>
-      </tr>
-      <tr>
-        <td colspan="2">
+        </div>
+      </div>
+      <div class="date-picker__row">
+        <div class="date-picker__col span-3-5">
           <span @click="$emit('changeMonth', 2)">March</span>
-        </td>
-        <td colspan="2">
+        </div>
+        <div class="date-picker__col span-3-5">
           <span @click="$emit('changeMonth', 3)">April</span>
-        </td>
-      </tr>
-      <tr>
-        <td colspan="2">
+        </div>
+      </div>
+      <div class="date-picker__row">
+        <div class="date-picker__col span-3-5">
           <span @click="$emit('changeMonth', 4)">May</span>
-        </td>
-        <td colspan="2">
+        </div>
+        <div class="date-picker__col span-3-5">
           <span @click="$emit('changeMonth', 5)">June</span>
-        </td>
-      </tr>
-      <tr>
-        <td colspan="2">
+        </div>
+      </div>
+      <div class="date-picker__row">
+        <div class="date-picker__col span-3-5">
           <span @click="$emit('changeMonth', 6)">July</span>
-        </td>
-        <td colspan="2">
+        </div>
+        <div class="date-picker__col span-3-5">
           <span @click="$emit('changeMonth', 7)">August</span>
-        </td>
-      </tr>
-      <tr>
-        <td colspan="2">
+        </div>
+      </div>
+      <div class="date-picker__row">
+        <div class="date-picker__col span-3-5">
           <span @click="$emit('changeMonth', 8)">September</span>
-        </td>
-        <td colspan="2">
+        </div>
+        <div class="date-picker__col span-3-5">
           <span @click="$emit('changeMonth', 9)">October</span>
-        </td>
-      </tr>
-      <tr>
-        <td colspan="2">
+        </div>
+      </div>
+      <div class="date-picker__row">
+        <div class="date-picker__col span-3-5">
           <span @click="$emit('changeMonth', 10)">November</span>
-        </td>
-        <td colspan="2">
+        </div>
+        <div class="date-picker__col span-3-5">
           <span @click="$emit('changeMonth', 11)">December</span>
-        </td>
-      </tr>
-    </tbody>
-  </table>
+        </div>
+      </div>
+    </main>
+  </div>
 </template>
 
 <script>
 export default {
-  name: "MonthPage"
+  name: "MonthPage",
+  props: {
+    month: {
+      type: Number,
+      required: true
+    },
+    months: {
+      type: Array,
+      required: true
+    },
+    year: {
+      type: Number,
+      required: true
+    }
+  }
 };
 </script>
 

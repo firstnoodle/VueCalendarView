@@ -55,6 +55,7 @@ export default {
       ],
       knownEvents: {
         changeDate: "onChangeDate",
+        changeMonth: "onChangeMonth",
         changePage: "onChangePage",
         stepMonth: "onStepMonth",
         stepYear: "onStepYear"
@@ -93,7 +94,11 @@ export default {
         };
       }
       if (this.currentPage.name === MonthPage.name) {
-        return {};
+        return {
+          month: this.month,
+          months: this.months,
+          year: this.year
+        };
       }
       if (this.currentPage.name === YearPage.name) {
         return {};
@@ -125,6 +130,11 @@ export default {
     onChangeDate(value) {
       this.$emit("change", value);
     },
+    onChangeMonth(value) {
+      this.month = value;
+      this.currentPage = DatePage;
+      this.updateDateGrid();
+    },
     onStepMonth(value) {
       const previousMonth = this.month;
       this.month = this.loopRange(this.month + value, this.months.length);
@@ -139,7 +149,7 @@ export default {
       this.updateDateGrid();
     },
     onChangePage(value) {
-      this.currentPage = value;
+      this.currentPage = this.$options.components[value];
     },
     onStepYear(value) {
       this.year += value;
@@ -286,6 +296,15 @@ $cellDimension: 40;
     }
     &.span-3 {
       width: $cellDimension * 3 + px;
+    }
+    &.span-3-5 {
+      width: $cellDimension * 3.5 + px;
+    }
+    &.span-4 {
+      width: $cellDimension * 4 + px;
+    }
+    &.span-5 {
+      width: $cellDimension * 5 + px;
     }
   }
 }
