@@ -10,9 +10,9 @@ UX wise it is heavily inspired by the element-ui datepicker.
 - [x] Centralize page data updates
 - [ ] Month view
   - [x] Layout
-  - [ ] Navigation
+  - [x] Navigation
   - [ ] MoveRequest
-  - [ ] Create updateGrid for MonthPage
+  - [x] Create updateGrid for MonthPage
     - [ ] Highlight current month and selected month
     - [x] ~~Disable months..?~~
 - [ ] Year view

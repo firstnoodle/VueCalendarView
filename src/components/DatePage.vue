@@ -29,7 +29,7 @@
               'is-selected' : col.selected, 
               'is-disabled' : col.disabled, 
               'is-inactive' : col.inactive,
-              'is-today' : col.today,
+              'is-current' : col.current,
             }"
         >{{ col.label }}</span>
       </div>

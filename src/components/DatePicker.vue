@@ -196,7 +196,6 @@ export default {
     updateCurrentPage(value = null) {
       const page = value || this.currentPage.name;
       const fnName = `update${page}`;
-      console.log(fnName);
       this[fnName]();
     },
 
@@ -233,7 +232,7 @@ export default {
             : false,
           inactive: dateCursor.month() !== this.month,
           selected: dateCursor.isSame(this.selectedDate, "day"),
-          today: dateCursor.isSame(this.today, "day")
+          current: dateCursor.isSame(this.today, "day")
         });
         dateCursor.add(1, "days");
       }
@@ -243,7 +242,8 @@ export default {
       for (let [index, month] of this.months.entries()) {
         this.monthGrid.push({
           label: month,
-          current: index === this.today.month(),
+          current:
+            index === this.today.month() && this.year === this.today.year(),
           selected: index === this.month
         });
       }
@@ -280,7 +280,7 @@ $cellDimension: 40;
       display: flex;
       height: $cellDimension - 14 + px;
       justify-content: center;
-      width: $cellDimension - 14 + px;
+      width: calc(100% - 14px);
 
       &.is-disabled {
         background-color: #eee;
@@ -297,11 +297,11 @@ $cellDimension: 40;
 
       &.is-selected {
         background-color: red;
-        border-radius: 50%;
+        border-radius: $cellDimension/2 + px;
         color: white;
       }
 
-      &.is-today {
+      &.is-current {
         color: red;
         font-weight: 700;
 

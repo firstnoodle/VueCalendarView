@@ -11,10 +11,14 @@
     </nav>
     <main>
       <div
-        v-for="(month,index) in months"
+        v-for="(month,index) in monthGrid"
         @click="$emit('changeMonth', index)"
         class="date-picker__cell span-3-5"
-      >{{ month }}</div>
+      >
+        <span
+          :class="{ 'is-selected': month.selected, 'is-current': month.current }"
+        >{{ month.label }}</span>
+      </div>
     </main>
   </div>
 </template>
