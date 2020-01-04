@@ -6,14 +6,15 @@ UX wise it is heavily inspired by the element-ui datepicker.
 #### TODO
 
 - [x] UpdateGrid should not rely on selectedDate
-- [ ] Move updateGrid inside DatePage
+- [ ] ~~Move updateGrid inside DatePage~~
+- [x] Centralize page data updates
 - [ ] Month view
   - [x] Layout
   - [ ] Navigation
   - [ ] MoveRequest
   - [ ] Create updateGrid for MonthPage
     - [ ] Highlight current month and selected month
-    - [ ] Disable months..?
+    - [x] ~~Disable months..?~~
 - [ ] Year view
   - [ ] Layout
   - [ ] Navigation

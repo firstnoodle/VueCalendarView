@@ -25,6 +25,7 @@ export default {
     return {
       currentPage: DatePage,
       dateGrid: [],
+      monthGrid: [],
       month: null,
       months: [
         "January",
@@ -96,6 +97,7 @@ export default {
       if (this.currentPage.name === MonthPage.name) {
         return {
           month: this.month,
+          monthGrid: this.monthGrid,
           months: this.months,
           year: this.year
         };
@@ -117,24 +119,31 @@ export default {
   methods: {
     update() {
       this.selectedDate = moment.utc(this.value);
+      this.month = this.selectedDate.month();
+      this.year = this.selectedDate.year();
 
-      let momentDate = moment.utc(this.value);
-      this.month = momentDate.month();
-      this.year = momentDate.year();
-
-      this.updateDateGrid();
+      this.updateCurrentPage();
     },
+
     loopRange(index, length) {
       return ((index % length) + length) % length;
     },
+
     onChangeDate(value) {
       this.$emit("change", value);
     },
+
     onChangeMonth(value) {
       this.month = value;
-      this.currentPage = DatePage;
-      this.updateDateGrid();
+      this.onChangePage(this.$options.components.DatePage.name);
+      this.updateCurrentPage();
     },
+
+    onChangePage(value) {
+      this.updateCurrentPage(value);
+      this.currentPage = this.$options.components[value];
+    },
+
     onStepMonth(value) {
       const previousMonth = this.month;
       this.month = this.loopRange(this.month + value, this.months.length);
@@ -146,15 +155,14 @@ export default {
           this.year--;
         }
       }
-      this.updateDateGrid();
+      this.updateCurrentPage();
     },
-    onChangePage(value) {
-      this.currentPage = this.$options.components[value];
-    },
+
     onStepYear(value) {
       this.year += value;
-      this.updateDateGrid();
+      this.updateCurrentPage();
     },
+
     moveRequest(direction) {
       console.log(direction);
       /*
@@ -185,7 +193,14 @@ export default {
       }
       */
     },
-    updateDateGrid() {
+    updateCurrentPage(value = null) {
+      const page = value || this.currentPage.name;
+      const fnName = `update${page}`;
+      console.log(fnName);
+      this[fnName]();
+    },
+
+    updateDatePage() {
       let dateCursor = moment()
         .utc()
         .year(this.year)
@@ -222,6 +237,19 @@ export default {
         });
         dateCursor.add(1, "days");
       }
+    },
+    updateMonthPage() {
+      this.monthGrid = [];
+      for (let [index, month] of this.months.entries()) {
+        this.monthGrid.push({
+          label: month,
+          current: index === this.today.month(),
+          selected: index === this.month
+        });
+      }
+    },
+    updateYearPage() {
+      console.log("updateYearPage");
     }
   }
 };
