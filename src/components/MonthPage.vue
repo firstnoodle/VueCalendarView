@@ -27,15 +27,7 @@
 export default {
   name: "MonthPage",
   props: {
-    month: {
-      type: Number,
-      required: true
-    },
     monthGrid: {
-      type: Array,
-      required: true
-    },
-    months: {
       type: Array,
       required: true
     },
@@ -43,9 +35,6 @@ export default {
       type: Number,
       required: true
     }
-  },
-  created() {
-    console.log(this.monthGrid);
   }
 };
 </script>

@@ -96,9 +96,7 @@ export default {
       }
       if (this.currentPage.name === MonthPage.name) {
         return {
-          month: this.month,
           monthGrid: this.monthGrid,
-          months: this.months,
           year: this.year
         };
       }
@@ -193,6 +191,7 @@ export default {
       }
       */
     },
+
     updateCurrentPage(value = null) {
       const page = value || this.currentPage.name;
       const fnName = `update${page}`;
@@ -237,6 +236,7 @@ export default {
         dateCursor.add(1, "days");
       }
     },
+
     updateMonthPage() {
       this.monthGrid = [];
       for (let [index, month] of this.months.entries()) {
@@ -248,6 +248,7 @@ export default {
         });
       }
     },
+
     updateYearPage() {
       console.log("updateYearPage");
     }
