@@ -244,7 +244,7 @@ export default {
           label: month,
           current:
             index === this.today.month() && this.year === this.today.year(),
-          selected: index === this.month
+          selected: index === this.selectedDate.month()
         });
       }
     },
