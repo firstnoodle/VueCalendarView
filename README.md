@@ -12,9 +12,9 @@ UX wise it is heavily inspired by the element-ui datepicker.
   - [x] Navigation
   - [x] Create updateGrid for MonthPage
     - [x] Highlight current month and selected month
-- [ ] Year view
+- [x] Year view
   - [x] Layout
-  - [ ] Navigation
+  - [x] Navigation
 - [ ] Handle MoveRequest
   - [ ] also on page with no selectedDate
 - [ ] Style buttons

@@ -2,11 +2,11 @@
   <div class="date-picker__page">
     <nav>
       <div class="date-picker__cell">
-        <button @click="$emit('stepYear', -1)">&lt;&lt;</button>
+        <button @click="$emit('stepYear', -10)">&lt;&lt;</button>
       </div>
-      <div class="date-picker__cell span-5">{{ year }}</div>
+      <div class="date-picker__cell span-5">{{ decade + ' - ' + (decade+9) }}</div>
       <div class="date-picker__cell">
-        <button @click="$emit('stepYear', 1)">&gt;&gt;</button>
+        <button @click="$emit('stepYear', 10)">&gt;&gt;</button>
       </div>
     </nav>
     <main>
@@ -25,6 +25,10 @@
 export default {
   name: "YearPage",
   props: {
+    decade: {
+      type: Number,
+      required: true
+    },
     year: {
       type: Number,
       required: true

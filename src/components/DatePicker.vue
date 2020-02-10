@@ -25,6 +25,7 @@ export default {
     return {
       currentPage: DatePage,
       dateGrid: [],
+      decade: null,
       monthGrid: [],
       yearGrid: [],
       month: null,
@@ -104,6 +105,7 @@ export default {
       }
       if (this.currentPage.name === YearPage.name) {
         return {
+          decade: this.decade,
           year: this.year,
           yearGrid: this.yearGrid
         };
@@ -261,11 +263,10 @@ export default {
     },
 
     updateYearPage() {
-      console.log("updateYearPage");
-      const decade = Math.floor(this.year / 10) * 10;
+      this.decade = Math.floor(this.year / 10) * 10;
       this.yearGrid = [];
       for (const digit of [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]) {
-        const year = decade + digit;
+        const year = this.decade + digit;
         this.yearGrid.push({
           label: year,
           current: this.today.year() === year,
