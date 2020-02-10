@@ -26,6 +26,7 @@ export default {
       currentPage: DatePage,
       dateGrid: [],
       monthGrid: [],
+      yearGrid: [],
       month: null,
       months: [
         "January",
@@ -58,6 +59,7 @@ export default {
         changeDate: "onChangeDate",
         changeMonth: "onChangeMonth",
         changePage: "onChangePage",
+        changeYear: "onChangeYear",
         stepMonth: "onStepMonth",
         stepYear: "onStepYear"
       }
@@ -101,7 +103,10 @@ export default {
         };
       }
       if (this.currentPage.name === YearPage.name) {
-        return {};
+        return {
+          year: this.year,
+          yearGrid: this.yearGrid
+        };
       }
     }
   },
@@ -133,6 +138,12 @@ export default {
 
     onChangeMonth(value) {
       this.month = value;
+      this.onChangePage(this.$options.components.DatePage.name);
+      this.updateCurrentPage();
+    },
+
+    onChangeYear(value) {
+      this.year = value;
       this.onChangePage(this.$options.components.DatePage.name);
       this.updateCurrentPage();
     },
@@ -251,6 +262,16 @@ export default {
 
     updateYearPage() {
       console.log("updateYearPage");
+      const decade = Math.floor(this.year / 10) * 10;
+      this.yearGrid = [];
+      for (const digit of [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]) {
+        const year = decade + digit;
+        this.yearGrid.push({
+          label: year,
+          current: this.today.year() === year,
+          selected: this.selectedDate.year() === year
+        });
+      }
     }
   }
 };

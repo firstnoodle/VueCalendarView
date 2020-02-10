@@ -13,7 +13,7 @@ UX wise it is heavily inspired by the element-ui datepicker.
   - [x] Create updateGrid for MonthPage
     - [x] Highlight current month and selected month
 - [ ] Year view
-  - [ ] Layout
+  - [x] Layout
   - [ ] Navigation
 - [ ] Handle MoveRequest
   - [ ] also on page with no selectedDate
