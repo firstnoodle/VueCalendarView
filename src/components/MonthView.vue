@@ -25,7 +25,7 @@
 
 <script>
 export default {
-  name: "MonthPage",
+  name: "MonthView",
   props: {
     monthGrid: {
       type: Array,

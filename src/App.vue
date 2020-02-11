@@ -1,15 +1,15 @@
 <template>
   <div id="app">
-    <date-picker ref="datepicker" :value="date" :options="options" @change="onDateChange"/>
+    <calendar-view ref="calendarView" :value="date" :options="options" @change="onDateChange"/>
   </div>
 </template>
 
 <script>
-import DatePicker from "./components/DatePicker.vue";
+import CalendarView from "./components/CalendarView.vue";
 
 export default {
   name: "App",
-  components: { "date-picker": DatePicker },
+  components: { CalendarView },
   data() {
     return {
       date: "2019-12-27",
@@ -24,7 +24,7 @@ export default {
   },
   mounted() {
     setTimeout(() => {
-      this.$refs.datepicker.moveRequest("up");
+      this.$refs.calendarView.moveRequest("up");
     }, 2000);
   },
   methods: {

@@ -8,8 +8,8 @@
         <button @click="$emit('stepMonth', -1)">&lt;</button>
       </div>
       <div class="date-picker__cell span-3">
-        <button @click="$emit('changePage', 'MonthPage')">{{ this.month }}</button>
-        <button @click="$emit('changePage', 'YearPage')">{{ this.year }}</button>
+        <button @click="$emit('changeView', 'MonthView')">{{ this.month }}</button>
+        <button @click="$emit('changeView', 'YearView')">{{ this.year }}</button>
       </div>
       <div class="date-picker__cell">
         <button @click="$emit('stepMonth', 1)">&gt;</button>
@@ -39,7 +39,7 @@
 
 <script>
 export default {
-  name: "DatePage",
+  name: "DateView",
   props: {
     dateGrid: {
       type: Array,

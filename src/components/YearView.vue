@@ -23,7 +23,7 @@
 
 <script>
 export default {
-  name: "YearPage",
+  name: "YearView",
   props: {
     decade: {
       type: Number,

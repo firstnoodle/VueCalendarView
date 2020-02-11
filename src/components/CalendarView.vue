@@ -1,17 +1,17 @@
 <template>
   <div class="date-picker">
-    <component :is="currentPage" v-bind="currentProps" v-dynamic-events="knownEvents"/>
+    <component :is="currentView" v-bind="currentProps" v-dynamic-events="knownEvents"/>
   </div>
 </template>
 
 <script>
-import DatePage from "./DatePage.vue";
-import MonthPage from "./MonthPage.vue";
-import YearPage from "./YearPage.vue";
+import DateView from "./DateView.vue";
+import MonthView from "./MonthView.vue";
+import YearView from "./YearView.vue";
 
 export default {
-  name: "DatePicker",
-  components: { DatePage, MonthPage, YearPage },
+  name: "CalendarView",
+  components: { DateView, MonthView, YearView },
   props: {
     options: {
       type: Object
@@ -23,7 +23,7 @@ export default {
   },
   data() {
     return {
-      currentPage: DatePage,
+      currentView: DateView,
       dateGrid: [],
       decade: null,
       monthGrid: [],
@@ -59,7 +59,7 @@ export default {
       knownEvents: {
         changeDate: "onChangeDate",
         changeMonth: "onChangeMonth",
-        changePage: "onChangePage",
+        changeView: "onChangeView",
         changeYear: "onChangeYear",
         stepMonth: "onStepMonth",
         stepYear: "onStepYear"
@@ -85,7 +85,7 @@ export default {
   },
   computed: {
     currentProps() {
-      if (this.currentPage.name === DatePage.name) {
+      if (this.currentView.name === DateView.name) {
         return {
           dateGrid: this.dateGrid,
           month: this.months[this.month],
@@ -97,13 +97,13 @@ export default {
           })
         };
       }
-      if (this.currentPage.name === MonthPage.name) {
+      if (this.currentView.name === MonthView.name) {
         return {
           monthGrid: this.monthGrid,
           year: this.year
         };
       }
-      if (this.currentPage.name === YearPage.name) {
+      if (this.currentView.name === YearView.name) {
         return {
           decade: this.decade,
           year: this.year,
@@ -127,7 +127,7 @@ export default {
       this.month = this.selectedDate.month();
       this.year = this.selectedDate.year();
 
-      this.updateCurrentPage();
+      this.updateCurrentView();
     },
 
     loopRange(index, length) {
@@ -140,19 +140,19 @@ export default {
 
     onChangeMonth(value) {
       this.month = value;
-      this.onChangePage(this.$options.components.DatePage.name);
-      this.updateCurrentPage();
+      this.onChangeView(this.$options.components.DateView.name);
+      this.updateCurrentView();
     },
 
     onChangeYear(value) {
       this.year = value;
-      this.onChangePage(this.$options.components.DatePage.name);
-      this.updateCurrentPage();
+      this.onChangeView(this.$options.components.DateView.name);
+      this.updateCurrentView();
     },
 
-    onChangePage(value) {
-      this.updateCurrentPage(value);
-      this.currentPage = this.$options.components[value];
+    onChangeView(value) {
+      this.updateCurrentView(value);
+      this.currentView = this.$options.components[value];
     },
 
     onStepMonth(value) {
@@ -166,12 +166,12 @@ export default {
           this.year--;
         }
       }
-      this.updateCurrentPage();
+      this.updateCurrentView();
     },
 
     onStepYear(value) {
       this.year += value;
-      this.updateCurrentPage();
+      this.updateCurrentView();
     },
 
     moveRequest(direction) {
@@ -205,13 +205,13 @@ export default {
       */
     },
 
-    updateCurrentPage(value = null) {
-      const page = value || this.currentPage.name;
+    updateCurrentView(value = null) {
+      const page = value || this.currentView.name;
       const fnName = `update${page}`;
       this[fnName]();
     },
 
-    updateDatePage() {
+    updateDateView() {
       let dateCursor = moment()
         .utc()
         .year(this.year)
@@ -250,7 +250,7 @@ export default {
       }
     },
 
-    updateMonthPage() {
+    updateMonthView() {
       this.monthGrid = [];
       for (let [index, month] of this.months.entries()) {
         this.monthGrid.push({
@@ -262,7 +262,7 @@ export default {
       }
     },
 
-    updateYearPage() {
+    updateYearView() {
       this.decade = Math.floor(this.year / 10) * 10;
       this.yearGrid = [];
       for (const digit of [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]) {
