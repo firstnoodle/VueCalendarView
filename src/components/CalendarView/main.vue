@@ -282,6 +282,19 @@ export default {
 $cellDimension: 40;
 
 .calendar-view {
+  // nav buttons
+  button {
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    padding: 4px 8px;
+    outline: none;
+
+    &:hover {
+      background-color: #eee;
+    }
+  }
+
   &__page {
     color: #555;
     font-family: Roboto mono;
