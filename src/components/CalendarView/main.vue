@@ -5,9 +5,9 @@
 </template>
 
 <script>
-import DateView from "./DateView.vue";
-import MonthView from "./MonthView.vue";
-import YearView from "./YearView.vue";
+import DateView from "./components/DateView.vue";
+import MonthView from "./components/MonthView.vue";
+import YearView from "./components/YearView.vue";
 
 export default {
   name: "CalendarView",

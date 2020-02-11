@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import CalendarView from "./components/CalendarView.vue";
+import CalendarView from "./components/CalendarView/main.vue";
 
 export default {
   name: "App",
