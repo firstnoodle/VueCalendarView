@@ -1,5 +1,5 @@
 <template>
-  <div class="date-picker">
+  <div class="calendar-view">
     <component :is="currentView" v-bind="currentProps" v-dynamic-events="knownEvents"/>
   </div>
 </template>
@@ -281,7 +281,7 @@ export default {
 <style lang="scss">
 $cellDimension: 40;
 
-.date-picker {
+.calendar-view {
   &__page {
     color: #555;
     font-family: Roboto mono;

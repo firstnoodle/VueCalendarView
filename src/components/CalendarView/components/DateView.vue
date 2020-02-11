@@ -1,28 +1,28 @@
 <template>
-  <div class="date-picker__page">
-    <nav class="date-picker__nav">
-      <div class="date-picker__cell">
+  <div class="calendar-view__page">
+    <nav class="calendar-view__nav">
+      <div class="calendar-view__cell">
         <button @click="$emit('stepYear', -1)">&lt;&lt;</button>
       </div>
-      <div class="date-picker__cell">
+      <div class="calendar-view__cell">
         <button @click="$emit('stepMonth', -1)">&lt;</button>
       </div>
-      <div class="date-picker__cell span-3">
+      <div class="calendar-view__cell span-3">
         <button @click="$emit('changeView', 'MonthView')">{{ this.month }}</button>
         <button @click="$emit('changeView', 'YearView')">{{ this.year }}</button>
       </div>
-      <div class="date-picker__cell">
+      <div class="calendar-view__cell">
         <button @click="$emit('stepMonth', 1)">&gt;</button>
       </div>
-      <div class="date-picker__cell">
+      <div class="calendar-view__cell">
         <button @click="$emit('stepYear', 1)">&gt;&gt;</button>
       </div>
     </nav>
     <header>
-      <div class="date-picker__cell" v-for="day in weekdays">{{ day }}</div>
+      <div class="calendar-view__cell" v-for="day in weekdays">{{ day }}</div>
     </header>
     <main>
-      <div class="date-picker__cell" v-for="col in dateGrid">
+      <div class="calendar-view__cell" v-for="col in dateGrid">
         <span
           @click="onDateClick(col)"
           :class="{ 

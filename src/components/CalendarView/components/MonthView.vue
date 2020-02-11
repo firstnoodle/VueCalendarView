@@ -1,11 +1,11 @@
 <template>
-  <div class="date-picker__page">
+  <div class="calendar-view__page">
     <nav>
-      <div class="date-picker__cell">
+      <div class="calendar-view__cell">
         <button @click="$emit('stepYear', -1)">&lt;&lt;</button>
       </div>
-      <div class="date-picker__cell span-5">{{ year }}</div>
-      <div class="date-picker__cell">
+      <div class="calendar-view__cell span-5">{{ year }}</div>
+      <div class="calendar-view__cell">
         <button @click="$emit('stepYear', 1)">&gt;&gt;</button>
       </div>
     </nav>
@@ -13,7 +13,7 @@
       <div
         v-for="(month,index) in monthGrid"
         @click="$emit('changeMonth', index)"
-        class="date-picker__cell span-3-5"
+        class="calendar-view__cell span-3-5"
       >
         <span
           :class="{ 'is-selected': month.selected, 'is-current': month.current }"
