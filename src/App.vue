@@ -5,6 +5,7 @@
 </template>
 
 <script>
+import { arrowKeys } from "./utils/keyboard.js";
 import CalendarView from "./components/CalendarView/main.vue";
 
 export default {
@@ -23,9 +24,18 @@ export default {
     };
   },
   mounted() {
+    /*
     setTimeout(() => {
       this.$refs.calendarView.moveRequest("up");
     }, 2000);
+    */
+
+    window.addEventListener("keydown", event => {
+      const move = arrowKeys.find(key => key.code === event.keyCode);
+      if (move) {
+        this.$refs.calendarView.moveRequest(move.direction);
+      }
+    });
   },
   methods: {
     onDateChange(date) {
