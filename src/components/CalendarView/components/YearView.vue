@@ -15,7 +15,7 @@
         @click="$emit('changeYear', year.label)"
         class="calendar-view__cell span-3-5"
       >
-        <span :class="{ 'is-selected': year.selected, 'is-current': year.current }">{{ year.label }}</span>
+        <span :class="{ 'is-current': year.current }">{{ year.label }}</span>
       </div>
     </main>
   </div>

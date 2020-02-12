@@ -155,43 +155,6 @@ export default {
     },
 
     moveRequest(direction) {
-      console.log(this.currentView);
-      const directionValues = {
-        DateView: {
-          up: -7,
-          down: 7,
-          left: -1,
-          right: 1,
-          type: "days"
-        },
-        MonthView: {
-          up: -2,
-          down: 2,
-          left: -1,
-          right: 1,
-          type: "months"
-        },
-        YearView: {
-          up: -2,
-          down: 2,
-          left: -1,
-          right: 1,
-          type: "years"
-        }
-      };
-      const move = [
-        directionValues[this.currentView.name][direction],
-        directionValues[this.currentView.name].type
-      ];
-
-      // selectedDate in currentView
-      if (this.selectedDateInCurrentView()) {
-        console.log("yes");
-      } else {
-        console.log("no");
-      }
-
-      /*
       let tempDate = moment(this.selectedDate);
       switch (direction) {
         case "up":
@@ -217,7 +180,12 @@ export default {
       } else {
         this.$emit("change", tempDate.format());
       }
-      */
+
+      // change back to DateView (if on month or year)
+      if (this.currentView !== DateView) {
+        this.onChangeView("DateView");
+        this.updateCurrentView();
+      }
     },
 
     selectedDateInCurrentView() {
@@ -284,8 +252,7 @@ export default {
         this.monthGrid.push({
           label: month,
           current:
-            index === this.today.month() && this.year === this.today.year(),
-          selected: index === this.selectedDate.month()
+            index === this.today.month() && this.year === this.today.year()
         });
       }
     },
@@ -297,8 +264,7 @@ export default {
         const year = this.decade + digit;
         this.yearGrid.push({
           label: year,
-          current: this.today.year() === year,
-          selected: this.selectedDate.year() === year
+          current: this.today.year() === year
         });
       }
     }

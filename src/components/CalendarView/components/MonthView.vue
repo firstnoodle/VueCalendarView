@@ -15,9 +15,7 @@
         @click="$emit('changeMonth', index)"
         class="calendar-view__cell span-3-5"
       >
-        <span
-          :class="{ 'is-selected': month.selected, 'is-current': month.current }"
-        >{{ month.label }}</span>
+        <span :class="{ 'is-current': month.current }">{{ month.label }}</span>
       </div>
     </main>
   </div>
