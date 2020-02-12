@@ -5,6 +5,7 @@
 </template>
 
 <script>
+import { months, weekdays } from "./config.js";
 import DateView from "./components/DateView.vue";
 import MonthView from "./components/MonthView.vue";
 import YearView from "./components/YearView.vue";
@@ -29,33 +30,10 @@ export default {
       monthGrid: [],
       yearGrid: [],
       month: null,
-      months: [
-        "January",
-        "February",
-        "March",
-        "April",
-        "May",
-        "June",
-        "July",
-        "August",
-        "September",
-        "October",
-        "November",
-        "December"
-      ],
       selectedDate: null,
       today: null,
       weekStart: 1,
       year: null,
-      weekdays: [
-        "Sunday",
-        "Monday",
-        "Tuesday",
-        "Wednesday",
-        "Thursday",
-        "Friday",
-        "Saturday"
-      ],
       knownEvents: {
         changeDate: "onChangeDate",
         changeMonth: "onChangeMonth",
@@ -88,11 +66,11 @@ export default {
       if (this.currentView.name === DateView.name) {
         return {
           dateGrid: this.dateGrid,
-          month: this.months[this.month],
+          month: months[this.month],
           year: this.year,
-          weekdays: this.weekdays.map((day, index) => {
-            return this.weekdays[
-              this.loopRange(index + this.weekStart, this.weekdays.length)
+          weekdays: weekdays.map((day, index) => {
+            return weekdays[
+              this.loopRange(index + this.weekStart, weekdays.length)
             ].slice(0, 3);
           })
         };
@@ -138,26 +116,28 @@ export default {
       this.$emit("change", value);
     },
 
-    onChangeMonth(value) {
-      this.month = value;
-      this.onChangeView(this.$options.components.DateView.name);
+    onChangeMonth(month) {
+      this.month = month;
+      this.onChangeView("DateView");
       this.updateCurrentView();
     },
 
-    onChangeYear(value) {
-      this.year = value;
-      this.onChangeView(this.$options.components.DateView.name);
+    onChangeYear(year) {
+      this.year = year;
+      this.onChangeView("DateView");
       this.updateCurrentView();
     },
 
-    onChangeView(value) {
-      this.updateCurrentView(value);
-      this.currentView = this.$options.components[value];
+    onChangeView(viewName) {
+      this.updateCurrentView(viewName);
+      this.currentView = this.$options.components[viewName];
     },
 
     onStepMonth(value) {
       const previousMonth = this.month;
-      this.month = this.loopRange(this.month + value, this.months.length);
+      this.month = this.loopRange(this.month + value, months.length);
+
+      // change year ?
       const deltaMonths = previousMonth - this.month;
       if (Math.abs(deltaMonths) > 1) {
         if (deltaMonths >= 0) {
@@ -175,7 +155,42 @@ export default {
     },
 
     moveRequest(direction) {
-      console.log(direction);
+      console.log(this.currentView);
+      const directionValues = {
+        DateView: {
+          up: -7,
+          down: 7,
+          left: -1,
+          right: 1,
+          type: "days"
+        },
+        MonthView: {
+          up: -2,
+          down: 2,
+          left: -1,
+          right: 1,
+          type: "months"
+        },
+        YearView: {
+          up: -2,
+          down: 2,
+          left: -1,
+          right: 1,
+          type: "years"
+        }
+      };
+      const move = [
+        directionValues[this.currentView.name][direction],
+        directionValues[this.currentView.name].type
+      ];
+
+      // selectedDate in currentView
+      if (this.selectedDateInCurrentView()) {
+        console.log("yes");
+      } else {
+        console.log("no");
+      }
+
       /*
       let tempDate = moment(this.selectedDate);
       switch (direction) {
@@ -205,9 +220,25 @@ export default {
       */
     },
 
-    updateCurrentView(value = null) {
-      const page = value || this.currentView.name;
-      const fnName = `update${page}`;
+    selectedDateInCurrentView() {
+      switch (this.currentView.name) {
+        case "DateView":
+          return this.selectedDate.month() === this.month;
+        case "MonthView":
+          return this.selectedDate.year() === this.year;
+        case "YearView":
+          return (
+            this.selectedDate.year() >= this.decade &&
+            this.selectedDate.year() <= this.decade + 9
+          );
+        default:
+          console.error("ERROR");
+      }
+    },
+
+    updateCurrentView(view = null) {
+      const viewName = view || this.currentView.name;
+      const fnName = `update${viewName}`;
       this[fnName]();
     },
 
@@ -225,10 +256,7 @@ export default {
       // find and set calendar grid start date
       const gridStartDate = !(dateCursor.day() - this.weekStart)
         ? 7
-        : this.loopRange(
-            dateCursor.day() - this.weekStart,
-            this.weekdays.length
-          );
+        : this.loopRange(dateCursor.day() - this.weekStart, weekdays.length);
       dateCursor.subtract(gridStartDate, "days");
 
       // clear dateGrid
@@ -252,7 +280,7 @@ export default {
 
     updateMonthView() {
       this.monthGrid = [];
-      for (let [index, month] of this.months.entries()) {
+      for (let [index, month] of months.entries()) {
         this.monthGrid.push({
           label: month,
           current:
