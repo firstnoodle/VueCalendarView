@@ -24,12 +24,6 @@ export default {
     };
   },
   mounted() {
-    /*
-    setTimeout(() => {
-      this.$refs.calendarView.moveRequest("up");
-    }, 2000);
-    */
-
     window.addEventListener("keydown", event => {
       const move = arrowKeys.find(key => key.code === event.keyCode);
       if (move) {
