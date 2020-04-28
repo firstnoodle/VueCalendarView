@@ -5,6 +5,7 @@
 </template>
 
 <script>
+import {Calendar} from '~/utils/date.js';
 import { months, weekdays } from "./config.js";
 import DateView from "./components/DateView.vue";
 import MonthView from "./components/MonthView.vue";
@@ -24,6 +25,7 @@ export default {
   },
   data() {
     return {
+      calendar: null,
       currentView: DateView,
       dateGrid: [],
       decade: null,
@@ -96,6 +98,11 @@ export default {
     }
   },
   created() {
+    this.calendar = new Calendar({
+      weekStart: 1
+    });
+    console.log(this.calendar.getDatesInMonth());
+
     this.today = moment().utc();
     this.update();
   },
