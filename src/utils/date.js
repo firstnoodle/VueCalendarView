@@ -80,7 +80,7 @@ export class Calendar {
                     ? this.options.disabledDate(dateCursor)
                     : false,
                 inactive:
-                    dateCursor.getMonth() !== this.selectedDate.getMonth(),
+                    dateCursor.getMonth() !== this.viewDate.getMonth(),
                 selected: dateCursor.getDate() === this.selectedDate.getDate(),
                 current: dateCursor.getDate() === this.today.getDate()
             });
