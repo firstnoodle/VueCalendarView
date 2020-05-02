@@ -172,4 +172,12 @@ export class Calendar {
     addDaysToView(days) {
         this.viewDate.setDate(this.viewDate.getDate() + days);    
     }
+
+    setViewMonth(month) {
+        this.viewDate.setMonth(month);
+    }
+
+    setViewYear(year) {
+        this.viewDate.setYear(year);
+    }
 }
