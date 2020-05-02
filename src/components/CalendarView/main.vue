@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import { Calendar } from '~/utils/date.js';
+import { Calendar } from '~/utils/calendar.js';
 import { months, weekdays } from './config.js';
 import DateView from './components/DateView.vue';
 import MonthView from './components/MonthView.vue';
