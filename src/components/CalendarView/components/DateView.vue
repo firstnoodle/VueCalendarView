@@ -19,7 +19,7 @@
             </div>
         </nav>
         <header>
-            <div class="calendar-view__cell" v-for="day in weekdays">{{ day }}</div>
+            <div class="calendar-view__cell" v-for="day in weekdays">{{ day.slice(0, 3) }}</div>
         </header>
         <main>
             <div class="calendar-view__cell" v-for="col in dateGrid">

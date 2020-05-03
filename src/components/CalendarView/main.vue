@@ -70,7 +70,7 @@ export default {
                     month: months[this.calendar.viewDate.getMonth()],
                     year: this.calendar.viewDate.getFullYear(),
                     weekdays: weekdays.map((day, index) => {
-                        return weekdays[this.loopRange(index + this.weekStart, weekdays.length)].slice(0, 3);
+                        return weekdays[this.loopRange(index + this.weekStart, weekdays.length)];
                     }),
                 };
             }
