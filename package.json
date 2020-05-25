@@ -28,7 +28,7 @@
     "file-loader": "^6.0.0",
     "jsdom": "^16.2.2",
     "jsdom-global": "^3.0.2",
-    "mocha": "^7.1.1",
+    "mocha": "^7.2.0",
     "mocha-webpack": "^1.1.0",
     "node-sass": "^4.13.1",
     "regenerator-runtime": "^0.13.5",
