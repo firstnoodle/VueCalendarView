@@ -97,12 +97,12 @@ export default {
     watch: {
         value(newDate, oldDate) {
             this.calendar.setSelectedDate(this.value);
-            this.updateCurrentView();
+            this.updateView();
         }
     },
     created() {
         this.calendar = new Calendar(this.options, this.value);
-        this.updateCurrentView();
+        this.updateView();
     },
     methods: {
         loopRange(index, length) {
@@ -116,28 +116,28 @@ export default {
         onChangeMonth(month) {
             this.calendar.setDateCursorMonth(month);
             this.onChangeView("DateView");
-            this.updateCurrentView();
+            this.updateView();
         },
 
         onChangeYear(year) {
             this.calendar.dateCursor.setYear(year);
             this.onChangeView("DateView");
-            this.updateCurrentView();
+            this.updateView();
         },
 
         onChangeView(viewName) {
-            this.updateCurrentView(viewName);
+            this.updateView(viewName);
             this.currentView = this.$options.components[viewName];
         },
 
         onStepMonth(value) {
             this.calendar.addMonthsToDateCursor(value);
-            this.updateCurrentView();
+            this.updateView();
         },
 
         onStepYear(value) {
             this.calendar.addYearsToDateCursor(value);
-            this.updateCurrentView();
+            this.updateView();
         },
 
         moveRequest(direction) {
@@ -148,10 +148,10 @@ export default {
             if (this.currentView !== DateView) {
                 this.onChangeView("DateView");
             }
-            this.updateCurrentView();
+            this.updateView();
         },
 
-        updateCurrentView(view = null) {
+        updateView(view = null) {
             const viewName = view || this.currentView.name;
             const fnName = `update${viewName}`;
             this[fnName]();
