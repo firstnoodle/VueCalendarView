@@ -5,26 +5,26 @@
 </template>
 
 <script>
-import { Calendar } from '~/utils/calendar.js';
-import { months, weekdays } from './config.js';
-import DateView from './components/DateView.vue';
-import MonthView from './components/MonthView.vue';
-import YearView from './components/YearView.vue';
+import { Calendar } from "~/utils/time/calendar.js";
+import { dateIsValid } from "~/utils/time/dates.js";
+import { months, weekdays } from "./config.js";
+import DateView from "./components/DateView.vue";
+import MonthView from "./components/MonthView.vue";
+import YearView from "./components/YearView.vue";
 
 export default {
-    name: 'CalendarView',
+    name: "CalendarView",
     components: { DateView, MonthView, YearView },
     props: {
         options: {
-            type: Object,
+            type: Object
         },
         value: {
             type: String | Object | null,
-            validator: (value) => {
-                const date = new Date(value);
-                return date.getTime() === date.getTime();
-            },
-        },
+            validator: value => {
+                return dateIsValid(value);
+            }
+        }
     },
     data() {
         return {
@@ -36,22 +36,22 @@ export default {
             selectedDate: null,
             weekStart: 1,
             knownEvents: {
-                changeDate: 'onChangeDate',
-                changeMonth: 'onChangeMonth',
-                changeView: 'onChangeView',
-                changeYear: 'onChangeYear',
-                stepMonth: 'onStepMonth',
-                stepYear: 'onStepYear',
-            },
+                changeDate: "onChangeDate",
+                changeMonth: "onChangeMonth",
+                changeView: "onChangeView",
+                changeYear: "onChangeYear",
+                stepMonth: "onStepMonth",
+                stepYear: "onStepYear"
+            }
         };
     },
     directives: {
         DynamicEvents: {
             bind: (el, binding, vnode) => {
                 const allEvents = binding.value;
-                Object.keys(allEvents).forEach((event) => {
+                Object.keys(allEvents).forEach(event => {
                     // register handler in the dynamic component
-                    vnode.componentInstance.$on(event, (eventData) => {
+                    vnode.componentInstance.$on(event, eventData => {
                         const targetEvent = allEvents[event];
                         vnode.context[targetEvent](eventData);
                     });
@@ -59,77 +59,69 @@ export default {
             },
             unbind: function(el, binding, vnode) {
                 vnode.componentInstance.$off();
-            },
-        },
+            }
+        }
     },
     computed: {
         currentProps() {
             if (this.currentView.name === DateView.name) {
                 return {
-                    dateGrid: this.calendar.getDatesInMonth(),
-                    month: months[this.calendar.viewDate.getMonth()],
-                    year: this.calendar.viewDate.getFullYear(),
+                    dateGrid: this.dateGrid,
+                    month: months[this.calendar.dateCursor.getMonth()],
+                    year: this.calendar.dateCursor.getFullYear(),
                     weekdays: weekdays.map((day, index) => {
-                        return weekdays[this.loopRange(index + this.weekStart, weekdays.length)];
-                    }),
+                        return weekdays[
+                            this.loopRange(
+                                index + this.options.weekStart,
+                                weekdays.length
+                            )
+                        ];
+                    })
                 };
             }
             if (this.currentView.name === MonthView.name) {
                 return {
-                    monthGrid: this.calendar.getMonthsInYear(),
-                    year: this.calendar.viewDate.getFullYear(),
+                    monthGrid: this.monthGrid,
+                    year: this.calendar.dateCursor.getFullYear()
                 };
             }
             if (this.currentView.name === YearView.name) {
                 return {
-                    decade: this.calendar.getDecade(this.calendar.viewDate),
-                    year: this.calendar.viewDate.getFullYear(),
-                    yearGrid: this.calendar.getYearsInDecade(),
+                    decade: Calendar.getDecade(this.calendar.dateCursor),
+                    year: this.calendar.dateCursor.getFullYear(),
+                    yearGrid: this.yearGrid
                 };
             }
-        },
+        }
     },
     watch: {
         value(newDate, oldDate) {
-            this.update();
-        },
+            this.calendar.setSelectedDate(this.value);
+            this.updateCurrentView();
+        }
     },
     created() {
-        this.calendar = new Calendar({
-            weekStart: 1,
-        });
-        console.log(this.calendar.getDatesInMonth());
-
-        // this.today = moment().utc();
-        // this.update();
+        this.calendar = new Calendar(this.options, this.value);
+        this.updateCurrentView();
     },
     methods: {
-        update() {
-            // this.selectedDate = moment.utc(this.value);
-            // this.month = this.selectedDate.month();
-            // this.year = this.selectedDate.year();
-            this.calendar.setSelectedDate(this.value);
-
-            this.updateCurrentView();
-        },
-
         loopRange(index, length) {
             return ((index % length) + length) % length;
         },
 
         onChangeDate(value) {
-            this.$emit('change', value);
+            this.$emit("change", value);
         },
 
         onChangeMonth(month) {
-            this.calendar.setViewMonth(month);
-            this.onChangeView('DateView');
+            this.calendar.setDateCursorMonth(month);
+            this.onChangeView("DateView");
             this.updateCurrentView();
         },
 
         onChangeYear(year) {
-            this.calendar.viewDate.setYear(year);
-            this.onChangeView('DateView');
+            this.calendar.dateCursor.setYear(year);
+            this.onChangeView("DateView");
             this.updateCurrentView();
         },
 
@@ -139,60 +131,24 @@ export default {
         },
 
         onStepMonth(value) {
-            // const previousMonth = this.month;
-            // this.month = this.loopRange(this.month + value, months.length);
-
-            // // change year ?
-            // const deltaMonths = previousMonth - this.month;
-            // if (Math.abs(deltaMonths) > 1) {
-            //   if (deltaMonths >= 0) {
-            //     this.year++;
-            //   } else {
-            //     this.year--;
-            //   }
-            // }
-            this.calendar.addMonthsToView(value);
+            this.calendar.addMonthsToDateCursor(value);
             this.updateCurrentView();
         },
 
         onStepYear(value) {
-            // this.year += value;
-            this.calendar.addYearsToView(value);
+            this.calendar.addYearsToDateCursor(value);
             this.updateCurrentView();
         },
 
         moveRequest(direction) {
-            // let tempDate = moment(this.selectedDate);
-            switch (direction) {
-                case 'up':
-                    tempDate.subtract(7, 'days');
-                    break;
-                case 'down':
-                    tempDate.add(7, 'days');
-                    break;
-                case 'left':
-                    tempDate.subtract(1, 'days');
-                    break;
-                case 'right':
-                    tempDate.add(1, 'days');
-                    break;
-                default:
-                    console.warn(`Direction [${direction}] not accepted`);
-                    break;
-            }
-            if (this.options.disabledDate) {
-                if (!this.options.disabledDate(tempDate)) {
-                    this.$emit('change', tempDate.format());
-                }
-            } else {
-                this.$emit('change', tempDate.format());
-            }
+            // TODO: create eventListener for calendar
+            this.calendar.moveDateCursor(direction);
 
             // change back to DateView (if on month or year)
             if (this.currentView !== DateView) {
-                this.onChangeView('DateView');
-                this.updateCurrentView();
+                this.onChangeView("DateView");
             }
+            this.updateCurrentView();
         },
 
         updateCurrentView(view = null) {
@@ -202,65 +158,17 @@ export default {
         },
 
         updateDateView() {
-            this.dateGrid = this.calendar.getDatesInMonth();
-            // let dateCursor = moment()
-            //   .utc()
-            //   .year(this.year)
-            //   .month(this.month)
-            //   .date(1)
-            //   .hour(0)
-            //   .minute(0)
-            //   .second(0)
-            //   .millisecond(0);
-
-            // // find and set calendar grid start date
-            // const gridStartDate = !(dateCursor.day() - this.weekStart)
-            //   ? 7
-            //   : this.loopRange(dateCursor.day() - this.weekStart, weekdays.length);
-            // dateCursor.subtract(gridStartDate, "days");
-
-            // // clear dateGrid
-            // this.dateGrid = [];
-
-            // // populate grid
-            // for (let row = 0; row < 42; row++) {
-            //   this.dateGrid.push({
-            //     label: dateCursor.date(),
-            //     date: dateCursor.format(),
-            //     disabled: this.options.disabledDate
-            //       ? this.options.disabledDate(dateCursor)
-            //       : false,
-            //     inactive: dateCursor.month() !== this.month,
-            //     selected: dateCursor.isSame(this.selectedDate, "day"),
-            //     current: dateCursor.isSame(this.today, "day")
-            //   });
-            //   dateCursor.add(1, "days");
-            // }
+            this.dateGrid = this.calendar.getDatesInCurrentMonth();
         },
 
         updateMonthView() {
-            this.monthGrid = this.calendar.getMonthsInYear();
-            // for (let [index, month] of months.entries()) {
-            //   this.monthGrid.push({
-            //     label: month,
-            //     current:
-            //       index === this.today.month() && this.year === this.today.year()
-            //   });
-            // }
+            this.monthGrid = this.calendar.getMonthsInCurrentYear();
         },
 
         updateYearView() {
-            // this.decade = Math.floor(this.year / 10) * 10;
-            this.yearGrid = this.calendar.getYearsInDecade();
-            // for (const digit of [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]) {
-            //   const year = this.decade + digit;
-            //   this.yearGrid.push({
-            //     label: year,
-            //     current: this.today.year() === year
-            //   });
-            // }
-        },
-    },
+            this.yearGrid = this.calendar.getYearsInCurrentDecade();
+        }
+    }
 };
 </script>
 

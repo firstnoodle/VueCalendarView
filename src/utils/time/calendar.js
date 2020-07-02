@@ -1,0 +1,317 @@
+import { TIME_IN_MILLISECONDS } from './time.js';
+import { datesAreEqual, dateIsValid, moveDate, parseDate } from './dates.js';
+/**
+ * Values for a classic calendar date grid
+ */
+const COLUMN_COUNT = 7;
+const ROW_COUNT = 6;
+const CELL_COUNT = COLUMN_COUNT * ROW_COUNT;
+
+const MONTHS = [
+    'January',
+    'February',
+    'March',
+    'April',
+    'May',
+    'June',
+    'July',
+    'August',
+    'September',
+    'October',
+    'November',
+    'December',
+];
+
+const WEEKDAYS = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
+
+/**
+ * Modulo function that works with negative numbers as well
+ * So fx passing -3 to a 0-9 range (length=10) would yield 7
+ * @param {Integer} index
+ * @param {Integer} length
+ * @returns {Integer}
+ */
+const loopRange = (index, length) => ((index % length) + length) % length;
+
+/**
+ * Premade disable-function to disable weekend (saturday and sunday)
+ * @param {Date} date
+ * @returns {Boolean}
+ */
+export const disableWeekend = (date) => {
+    const d = new Date(date);
+    const day = d.getDay();
+    return day === 0 || day === 6;
+};
+
+/**
+ * Premade disable-function to disable workdays (monday - friday)
+ * @param {Date} date
+ * @returns {Boolean}
+ */
+export const disableWorkDays = (date) => {
+    const d = new Date(date);
+    const day = d.getDay();
+    const weekDays = [1, 2, 3, 4, 5];
+    return weekDays.indexOf(day) !== -1;
+};
+
+/**
+ * Premade disable-function to disable specific weekDay
+ * Accepts both an integer 0-6 or a string fx 'monday'
+ * @param {Interger | String} weekDay
+ * @returns {Function}
+ */
+export const disableWeekday = (weekDay) => {
+    let parsedDay;
+    if (typeof weekDay === 'string') {
+        parsedDay = getWeekDayIndex(weekDay);
+    } else {
+        parsedDay = weekDay;
+    }
+    return (date) => {
+        const d = new Date(date);
+        const day = d.getDay();
+        return day === parsedDay;
+    };
+};
+
+/**
+ * Get index of weekday - fx 3 for 'wednesday'
+ * @param {Interger | String} weekDayString
+ * @returns {Function}
+ */
+export const getWeekDayIndex = (weekDayString) => {
+    if (WEEKDAYS.indexOf(weekDayString.toLowerCase()) === -1) {
+        console.log(`Calendar.js @ getWeekdayIndex: invalid weekday [${weekDayString}]`);
+        return null;
+    }
+    return WEEKDAYS.indexOf(weekDayString);
+};
+
+/**
+ * Calendar class
+ *
+ * @param {Object} options
+ * @param {Date|Null} date
+ */
+export class Calendar {
+    constructor(options, date = null) {
+        this.options = options;
+
+        // so we can highlight toadys date, month, and year
+        this.today = new Date();
+
+        // the selected date - will default to today if none is passed
+        this.selectedDate = null;
+
+        // dateCursor determines what we are viewing
+        // it has nothing to do with the selectedDate or today
+        this.dateCursor = null;
+
+        if (date && dateIsValid(date)) this.setSelectedDate(date);
+        else this.setSelectedDate(this.today);
+    }
+
+    /**
+     * Get decade that date belongs to
+     * @param {Date} date
+     * @returns {Integer}
+     */
+    static getDecade(date) {
+        return Math.floor(date.getFullYear() / 10) * 10;
+    }
+
+    /**
+     * Get week number of year that date belongs to
+     * @param {Date} date
+     * @returns {Integer}
+     */
+    static getWeekNumber(date) {
+        // Copy date so don't modify original
+        date = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()));
+        // Set to nearest Thursday: current date + 4 - current day number
+        // Make Sunday's day number 7
+        date.setUTCDate(date.getUTCDate() + 4 - (date.getUTCDay() || 7));
+        // Get first day of year
+        var yearStart = new Date(Date.UTC(date.getUTCFullYear(), 0, 1));
+        // Calculate full weeks to nearest Thursday
+        var weekNumber = Math.ceil(((date - yearStart) / TIME_IN_MILLISECONDS.DAY + 1) / 7);
+        return weekNumber;
+    }
+
+    /**
+     * Add {n} years to the dateCursor
+     * @param {Integer} years
+     */
+    addYearsToDateCursor(years) {
+        this.dateCursor.setYear(this.dateCursor.getFullYear() + years);
+    }
+
+    /**
+     * Add {n} months to the dateCursor
+     * @param {Integer} years
+     */
+    addMonthsToDateCursor(months) {
+        const currentMonth = this.dateCursor.getMonth();
+        const requestedMonth = loopRange(currentMonth + months, MONTHS.length);
+
+        // TODO: revisit this - it doesn't seem to be the right solution..
+        // change year ?
+        const deltaMonths = currentMonth - requestedMonth;
+        if (Math.abs(deltaMonths) > 1) {
+            if (deltaMonths >= 0) {
+                this.addYearsToDateCursor(1);
+            } else {
+                this.addYearsToDateCursor(-1);
+            }
+        }
+        this.dateCursor.setMonth(requestedMonth);
+    }
+
+    /**
+     * Add {n} weeks to the dateCursor
+     * @param {Integer} years
+     */
+    addWeeksToDateCursor(weeks) {
+        // @todo
+        console.log('todo: addWeeksToDateCursor');
+    }
+
+    /**
+     * Add {n} days to the dateCursor
+     * @param {Integer} years
+     */
+    addDaysToDateCursor(days) {
+        this.dateCursor.setDate(this.dateCursor.getDate() + days);
+    }
+
+    /**
+     * Add {n} days to the dateCursor
+     * @param {Integer} years
+     */
+    getDatesInCurrentMonth() {
+        let cursor = new Date(this.dateCursor.getFullYear(), this.dateCursor.getMonth(), 1);
+
+        // find and set calendar grid start date
+        const startDate = !(cursor.getDay() - this.options.weekStart)
+            ? 7
+            : loopRange(cursor.getDay() - this.options.weekStart, WEEKDAYS.length);
+
+        cursor.setDate(cursor.getDate() - startDate);
+
+        let dates = [];
+        // populate grid
+        for (let row = 0; row < CELL_COUNT; row++) {
+            dates.push({
+                label: cursor.getDate(),
+                date: cursor.toString(),
+                disabled: this.options.disabledDate ? this.options.disabledDate(cursor) : false,
+                inactive: cursor.getMonth() !== this.dateCursor.getMonth(),
+                selected: datesAreEqual(cursor, this.selectedDate),
+                current: datesAreEqual(cursor, this.today),
+            });
+            cursor.setDate(cursor.getDate() + 1);
+        }
+        return dates;
+    }
+
+    /**
+     * Get dates in week that the dateCursor is in
+     * @returns {Array} of 7 dates
+     */
+    getDatesInCurrentWeek() {
+        // TODO
+        return null;
+    }
+
+    /**
+     * Get months in the year that the dateCursor is in
+     * @returns {Array} of 12 months
+     */
+    getMonthsInCurrentYear() {
+        const monthList = [];
+        for (let [index, month] of MONTHS.entries()) {
+            monthList.push({
+                label: month,
+                current: index === this.today.getMonth() && this.dateCursor.getFullYear() === this.today.getFullYear(),
+            });
+        }
+        return monthList;
+    }
+
+    /**
+     * Get years in the decade that the dateCursor is in
+     * @returns {Array} of 10 years
+     */
+    getYearsInCurrentDecade() {
+        const decade = Calendar.getDecade(this.dateCursor);
+        let yearGrid = [];
+        for (const digit of [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]) {
+            const year = decade + digit;
+            yearGrid.push({
+                label: year,
+                current: this.today.getFullYear() === year,
+            });
+        }
+        return yearGrid;
+    }
+
+    /**
+     * Try to move dateCursor in specific direction
+     * @returns {void}
+     */
+    moveDateCursor(direction) {
+        let tempDate = new Date(this.selectedDate.getFullYear(), this.selectedDate.getMonth(), this.selectedDate.getDate());
+        switch (direction) {
+            case 'up':
+                tempDate = moveDate(tempDate, -7, 'DAY');
+                break;
+            case 'down':
+                tempDate = moveDate(tempDate, 7, 'DAY');
+                break;
+            case 'left':
+                tempDate = moveDate(tempDate, -1, 'DAY');
+                break;
+            case 'right':
+                tempDate = moveDate(tempDate, 1, 'DAY');
+                break;
+            default:
+                console.warn(`Direction [${direction}] not accepted`);
+                break;
+        }
+
+        if (this.options.disabledDate && this.options.disabledDate(tempDate)) {
+            return;
+        }
+
+        this.setSelectedDate(tempDate);
+    }
+
+    /**
+     * Set selected date
+     * this automatically sets the dateCursor to the same value
+     * @returns {void}
+     */
+    setSelectedDate(date) {
+        if (!dateIsValid(date)) return;
+        this.selectedDate = parseDate(date);
+        this.dateCursor = this.selectedDate;
+    }
+
+    /**
+     * Set month of the dateCursor
+     * @returns {void}
+     */
+    setDateCursorMonth(month) {
+        this.dateCursor.setMonth(month);
+    }
+
+    /**
+     * Set year of the dateCursor
+     * @returns {void}
+     */
+    setDateCursorYear(year) {
+        this.dateCursor.setYear(year);
+    }
+}
