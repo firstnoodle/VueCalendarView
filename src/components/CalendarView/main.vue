@@ -116,13 +116,11 @@ export default {
         onChangeMonth(month) {
             this.calendar.setDateCursorMonth(month);
             this.onChangeView("DateView");
-            this.updateView();
         },
 
         onChangeYear(year) {
             this.calendar.dateCursor.setYear(year);
             this.onChangeView("DateView");
-            this.updateView();
         },
 
         onChangeView(viewName) {
