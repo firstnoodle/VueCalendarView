@@ -1,4 +1,3 @@
-import { TIME_IN_MILLISECONDS } from './time.js';
 import { datesAreEqual, dateIsValid, getDecade, moveDate, parseDate } from './dates.js';
 /**
  * Values for a classic calendar date grid
