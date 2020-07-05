@@ -1,5 +1,5 @@
 import { TIME_IN_MILLISECONDS } from './time.js';
-import { datesAreEqual, dateIsValid, moveDate, parseDate } from './dates.js';
+import { datesAreEqual, dateIsValid, getDecade, moveDate, parseDate } from './dates.js';
 /**
  * Values for a classic calendar date grid
  */
@@ -83,7 +83,7 @@ export const disableWeekday = (weekDay) => {
  */
 export const getWeekDayIndex = (weekDayString) => {
     if (WEEKDAYS.indexOf(weekDayString.toLowerCase()) === -1) {
-        console.log(`Calendar.js @ getWeekdayIndex: invalid weekday [${weekDayString}]`);
+        console.log(`Calendjs @ getWeekdayIndex: invalid weekday [${weekDayString}]`);
         return null;
     }
     return WEEKDAYS.indexOf(weekDayString);
@@ -111,33 +111,6 @@ export class Calendar {
 
         if (date && dateIsValid(date)) this.setSelectedDate(date);
         else this.setSelectedDate(this.today);
-    }
-
-    /**
-     * Get decade that date belongs to
-     * @param {Date} date
-     * @returns {Integer}
-     */
-    static getDecade(date) {
-        return Math.floor(date.getFullYear() / 10) * 10;
-    }
-
-    /**
-     * Get week number of year that date belongs to
-     * @param {Date} date
-     * @returns {Integer}
-     */
-    static getWeekNumber(date) {
-        // Copy date so don't modify original
-        date = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()));
-        // Set to nearest Thursday: current date + 4 - current day number
-        // Make Sunday's day number 7
-        date.setUTCDate(date.getUTCDate() + 4 - (date.getUTCDay() || 7));
-        // Get first day of year
-        var yearStart = new Date(Date.UTC(date.getUTCFullYear(), 0, 1));
-        // Calculate full weeks to nearest Thursday
-        var weekNumber = Math.ceil(((date - yearStart) / TIME_IN_MILLISECONDS.DAY + 1) / 7);
-        return weekNumber;
     }
 
     /**
@@ -245,7 +218,7 @@ export class Calendar {
      * @returns {Array} of 10 years
      */
     getYearsInCurrentDecade() {
-        const decade = Calendar.getDecade(this.dateCursor);
+        const decade = getDecade(this.dateCursor);
         let yearGrid = [];
         for (const digit of [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]) {
             const year = decade + digit;
@@ -296,7 +269,7 @@ export class Calendar {
     setSelectedDate(date) {
         if (!dateIsValid(date)) return;
         this.selectedDate = parseDate(date);
-        this.dateCursor = this.selectedDate;
+        this.dateCursor = new Date(this.selectedDate.getFullYear(), this.selectedDate.getMonth(), this.selectedDate.getDate());
     }
 
     /**
