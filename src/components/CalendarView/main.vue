@@ -1,12 +1,13 @@
 <template>
     <div class="calendar-view">
+        {{ this.calendar.selectedDate }}
         <component :is="currentView" v-bind="currentProps" v-dynamic-events="knownEvents" />
     </div>
 </template>
 
 <script>
 import { Calendar } from "~/utils/time/calendar.js";
-import { dateIsValid } from "~/utils/time/dates.js";
+import { dateIsValid, getDecade } from "~/utils/time/dates.js";
 import { months, weekdays } from "./config.js";
 import DateView from "./components/DateView.vue";
 import MonthView from "./components/MonthView.vue";
@@ -87,7 +88,7 @@ export default {
             }
             if (this.currentView.name === YearView.name) {
                 return {
-                    decade: Calendar.getDecade(this.calendar.dateCursor),
+                    decade: getDecade(this.calendar.dateCursor),
                     year: this.calendar.dateCursor.getFullYear(),
                     yearGrid: this.yearGrid
                 };
