@@ -81,9 +81,9 @@ export const dateIsValid = date => {
  */
 export const datesAreEqual = (date1, date2) => {
     return (
-        date1.getFullYear() === date2.getFullYear() &&
-        date1.getMonth() === date2.getMonth() &&
-        date1.getDate() === date2.getDate()
+        date1.getUTCFullYear() === date2.getUTCFullYear() &&
+        date1.getUTCMonth() === date2.getUTCMonth() &&
+        date1.getUTCDate() === date2.getUTCDate()
     );
 };
 
@@ -93,7 +93,7 @@ export const datesAreEqual = (date1, date2) => {
  * @returns {Integer}
  */
 export const getDecade = date => {
-    return Math.floor(date.getFullYear() / 10) * 10;
+    return Math.floor(date.getUTCFullYear() / 10) * 10;
 };
 
 /**
@@ -103,7 +103,7 @@ export const getDecade = date => {
  */
 export const getWeekNumber = date => {
     // Copy date so don't modify original
-    date = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()));
+    date = new Date(Date.UTC(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate()));
     // Set to nearest Thursday: current date + 4 - current day number
     // Make Sunday's day number 7
     date.setUTCDate(date.getUTCDate() + 4 - (date.getUTCDay() || 7));
@@ -139,7 +139,8 @@ export const moveDate = (date, value, unit) => {
  */
 export const parseDate = date => {
     if (typeof date === 'string') {
-        return new Date(date);
+        const d = new Date(date);
+        return new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()));
     }
     return date;
 };

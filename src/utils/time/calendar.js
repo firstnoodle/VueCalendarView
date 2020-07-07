@@ -1,4 +1,4 @@
-import { datesAreEqual, dateIsValid, getDecade, moveDate, parseDate } from './dates.js';
+import { datesAreEqual, dateIsValid, getDecade, moveDate, parseDate, printDate } from './dates.js';
 /**
  * Values for a classic calendar date grid
  */
@@ -38,8 +38,8 @@ const loopRange = (index, length) => ((index % length) + length) % length;
  * @returns {Boolean}
  */
 export const disableWeekend = (date) => {
-    const d = new Date(date);
-    const day = d.getDay();
+    const d = parseDate(date);
+    const day = d.getUTCDay();
     return day === 0 || day === 6;
 };
 
@@ -49,8 +49,8 @@ export const disableWeekend = (date) => {
  * @returns {Boolean}
  */
 export const disableWorkDays = (date) => {
-    const d = new Date(date);
-    const day = d.getDay();
+    const d = parseDate(date);
+    const day = d.getUTCDay();
     const weekDays = [1, 2, 3, 4, 5];
     return weekDays.indexOf(day) !== -1;
 };
@@ -69,8 +69,8 @@ export const disableWeekday = (weekDay) => {
         parsedDay = weekDay;
     }
     return (date) => {
-        const d = new Date(date);
-        const day = d.getDay();
+        const d = parseDate(date);
+        const day = d.getUTCDay();
         return day === parsedDay;
     };
 };
@@ -99,7 +99,8 @@ export class Calendar {
         this.options = options;
 
         // so we can highlight toadys date, month, and year
-        this.today = new Date();
+        const d = new Date();
+        this.today = new Date(Date.UTC(d.getUTCFullYear(), d.getUTCMonth(), d.getUTCDate()));
 
         // the selected date - will default to today if none is passed
         this.selectedDate = null;
@@ -117,7 +118,7 @@ export class Calendar {
      * @param {Integer} years
      */
     addYearsToDateCursor(years) {
-        this.dateCursor.setYear(this.dateCursor.getFullYear() + years);
+        this.dateCursor.setYear(this.dateCursor.getUTCFullYear() + years);
     }
 
     /**
@@ -125,7 +126,7 @@ export class Calendar {
      * @param {Integer} years
      */
     addMonthsToDateCursor(months) {
-        const currentMonth = this.dateCursor.getMonth();
+        const currentMonth = this.dateCursor.getUTCMonth();
         const requestedMonth = loopRange(currentMonth + months, MONTHS.length);
 
         // TODO: revisit this - it doesn't seem to be the right solution..
@@ -138,7 +139,7 @@ export class Calendar {
                 this.addYearsToDateCursor(-1);
             }
         }
-        this.dateCursor.setMonth(requestedMonth);
+        this.dateCursor.setUTCMonth(requestedMonth);
     }
 
     /**
@@ -155,7 +156,7 @@ export class Calendar {
      * @param {Integer} years
      */
     addDaysToDateCursor(days) {
-        this.dateCursor.setDate(this.dateCursor.getDate() + days);
+        this.dateCursor.setUTCDate(this.dateCursor.getUTCDate() + days);
     }
 
     /**
@@ -163,27 +164,27 @@ export class Calendar {
      * @param {Integer} years
      */
     getDatesInCurrentMonth() {
-        let cursor = new Date(this.dateCursor.getFullYear(), this.dateCursor.getMonth(), 1);
+        let cursor = new Date(Date.UTC(this.dateCursor.getUTCFullYear(), this.dateCursor.getUTCMonth(), 1));
 
         // find and set calendar grid start date
-        const startDate = !(cursor.getDay() - this.options.weekStart)
+        const startDate = !(cursor.getUTCDay() - this.options.weekStart)
             ? 7
-            : loopRange(cursor.getDay() - this.options.weekStart, WEEKDAYS.length);
+            : loopRange(cursor.getUTCDay() - this.options.weekStart, WEEKDAYS.length);
 
-        cursor.setDate(cursor.getDate() - startDate);
+        cursor.setUTCDate(cursor.getUTCDate() - startDate);
 
         let dates = [];
         // populate grid
         for (let row = 0; row < CELL_COUNT; row++) {
             dates.push({
-                label: cursor.getDate(),
-                date: cursor.toString(),
+                label: cursor.getUTCDate(),
+                date: cursor.toUTCString(),
                 disabled: this.options.disabledDate ? this.options.disabledDate(cursor) : false,
-                inactive: cursor.getMonth() !== this.dateCursor.getMonth(),
+                inactive: cursor.getUTCMonth() !== this.dateCursor.getUTCMonth(),
                 selected: datesAreEqual(cursor, this.selectedDate),
                 current: datesAreEqual(cursor, this.today),
             });
-            cursor.setDate(cursor.getDate() + 1);
+            cursor.setUTCDate(cursor.getUTCDate() + 1);
         }
         return dates;
     }
@@ -194,7 +195,24 @@ export class Calendar {
      */
     getDatesInCurrentWeek() {
         // TODO
-        return null;
+        let cursor = new Date(Date.UTC(this.dateCursor.getUTCFullYear(), this.dateCursor.getUTCMonth(), this.dateCursor.getUTCDate()));
+        const offset = loopRange(cursor.getUTCDay() - this.options.weekStart, WEEKDAYS.length);
+        cursor = moveDate(cursor, -offset, 'DAY');
+
+        let dates = [];
+        // populate grid
+        for (let i = 0; i < 7; i++) {
+            dates.push({
+                label: cursor.getUTCDate(),
+                date: cursor.toUTCString(),
+                disabled: this.options.disabledDate ? this.options.disabledDate(cursor) : false,
+                inactive: cursor.getUTCMonth() !== this.dateCursor.getUTCMonth(),
+                selected: datesAreEqual(cursor, this.selectedDate),
+                current: datesAreEqual(cursor, this.today),
+            });
+            cursor.setUTCDate(cursor.getUTCDate() + 1);
+        }
+        return dates;
     }
 
     /**
@@ -206,7 +224,7 @@ export class Calendar {
         for (let [index, month] of MONTHS.entries()) {
             monthList.push({
                 label: month,
-                current: index === this.today.getMonth() && this.dateCursor.getFullYear() === this.today.getFullYear(),
+                current: index === this.today.getUTCMonth() && this.dateCursor.getUTCFullYear() === this.today.getUTCFullYear(),
             });
         }
         return monthList;
@@ -223,7 +241,7 @@ export class Calendar {
             const year = decade + digit;
             yearGrid.push({
                 label: year,
-                current: this.today.getFullYear() === year,
+                current: this.today.getUTCFullYear() === year,
             });
         }
         return yearGrid;
@@ -234,7 +252,7 @@ export class Calendar {
      * @returns {void}
      */
     moveDateCursor(direction) {
-        let tempDate = new Date(this.selectedDate.getFullYear(), this.selectedDate.getMonth(), this.selectedDate.getDate());
+        let tempDate = new Date(Date.UTC(this.selectedDate.getUTCFullYear(), this.selectedDate.getUTCMonth(), this.selectedDate.getUTCDate()));
         switch (direction) {
             case 'up':
                 tempDate = moveDate(tempDate, -7, 'DAY');
@@ -268,7 +286,13 @@ export class Calendar {
     setSelectedDate(date) {
         if (!dateIsValid(date)) return;
         this.selectedDate = parseDate(date);
-        this.dateCursor = new Date(this.selectedDate.getFullYear(), this.selectedDate.getMonth(), this.selectedDate.getDate());
+        this.dateCursor = new Date(
+            Date.UTC(
+                this.selectedDate.getUTCFullYear(),
+                this.selectedDate.getUTCMonth(),
+                this.selectedDate.getUTCDate()
+            )
+        );
     }
 
     /**
@@ -276,7 +300,7 @@ export class Calendar {
      * @returns {void}
      */
     setDateCursorMonth(month) {
-        this.dateCursor.setMonth(month);
+        this.dateCursor.setUTCMonth(month);
     }
 
     /**
