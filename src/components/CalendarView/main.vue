@@ -1,6 +1,6 @@
 <template>
     <div class="calendar-view">
-        {{ this.calendar.selectedDate }}
+        {{ this.calendar.selectedDate.toUTCString() }}
         <component :is="currentView" v-bind="currentProps" v-dynamic-events="knownEvents" />
     </div>
 </template>
@@ -11,11 +11,12 @@ import { dateIsValid, getDecade } from "~/utils/time/dates.js";
 import { months, weekdays } from "./config.js";
 import DateView from "./components/DateView.vue";
 import MonthView from "./components/MonthView.vue";
+import WeekView from "./components/WeekView.vue";
 import YearView from "./components/YearView.vue";
 
 export default {
     name: "CalendarView",
-    components: { DateView, MonthView, YearView },
+    components: { DateView, MonthView, WeekView, YearView },
     props: {
         options: {
             type: Object
@@ -30,8 +31,9 @@ export default {
     data() {
         return {
             calendar: null,
-            currentView: DateView,
+            currentView: WeekView,
             dateGrid: [],
+            weekGrid: [],
             monthGrid: [],
             yearGrid: [],
             selectedDate: null,
@@ -68,8 +70,8 @@ export default {
             if (this.currentView.name === DateView.name) {
                 return {
                     dateGrid: this.dateGrid,
-                    month: months[this.calendar.dateCursor.getMonth()],
-                    year: this.calendar.dateCursor.getFullYear(),
+                    month: months[this.calendar.dateCursor.getUTCMonth()],
+                    year: this.calendar.dateCursor.getUTCFullYear(),
                     weekdays: weekdays.map((day, index) => {
                         return weekdays[
                             this.loopRange(
@@ -80,16 +82,22 @@ export default {
                     })
                 };
             }
+            if (this.currentView.name === WeekView.name) {
+                return {
+                    weekGrid: this.weekGrid,
+                    year: this.calendar.dateCursor.getUTCFullYear()
+                };
+            }
             if (this.currentView.name === MonthView.name) {
                 return {
                     monthGrid: this.monthGrid,
-                    year: this.calendar.dateCursor.getFullYear()
+                    year: this.calendar.dateCursor.getUTCFullYear()
                 };
             }
             if (this.currentView.name === YearView.name) {
                 return {
                     decade: getDecade(this.calendar.dateCursor),
-                    year: this.calendar.dateCursor.getFullYear(),
+                    year: this.calendar.dateCursor.getUTCFullYear(),
                     yearGrid: this.yearGrid
                 };
             }
@@ -158,6 +166,10 @@ export default {
 
         updateDateView() {
             this.dateGrid = this.calendar.getDatesInCurrentMonth();
+        },
+
+        updateWeekView() {
+            this.weekGrid = this.calendar.getDatesInCurrentWeek();
         },
 
         updateMonthView() {
