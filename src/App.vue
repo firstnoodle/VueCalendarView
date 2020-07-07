@@ -1,5 +1,6 @@
 <template>
     <div id="app">
+        <h1>{{ date }}</h1>
         <calendar-view ref="calendarView" :value="date" :options="options" @change="onDateChange" />
     </div>
 </template>
@@ -18,7 +19,7 @@ export default {
     components: { CalendarView },
     data() {
         return {
-            date: "2019-12-27",
+            date: "2020-11-18",
             options: {
                 weekStart: 1,
                 disabledDate: disableWeekday("sunday")
@@ -29,6 +30,7 @@ export default {
         window.addEventListener("keydown", event => {
             const move = arrowKeys.find(key => key.code === event.keyCode);
             if (move) {
+                event.preventDefault();
                 this.$refs.calendarView.moveRequest(move.direction);
             }
         });
@@ -46,6 +48,8 @@ export default {
 
 * {
     box-sizing: border-box;
+    margin: 0;
+    padding: 0;
 }
 
 #app {
