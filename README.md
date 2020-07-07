@@ -19,17 +19,17 @@ This is a short first stab at listing what it would expose.
 **Functions**
 SelectDate
 
-ChangeViewType  viewType = "Date"
-- DateView      viewData = getHoursInDate
-- WeekView      viewData = DaysInWeek
-- MonthView     viewData = getDaysInMonth
-- YearView      viewData = getMonthsInYear
-- DecadeView    viewData = YearsInDecade
+ChangeViewType  `viewType = "Date"`
+- DateView      `viewData = getHoursInDate`
+- WeekView      `viewData = DaysInWeek`
+- MonthView     `viewData = getDaysInMonth`
+- YearView      `viewData = getMonthsInYear`
+- DecadeView    `viewData = YearsInDecade`
 
 MoveView by 
-- StepHours     moveViewDate(value, "hours")
-- StepDate      moveViewDate(value, "days")
-- StepWeek      moveViewDate(value, "weeks")
-- StepMonth     moveViewDate(value, "months")
-- StepYear      moveViewDate(value, "years")
-- StepDecade    moveViewDate(value, "decades")
+- StepHours     `moveViewDate(value, "hours")`
+- StepDate      `moveViewDate(value, "days")`
+- StepWeek      `moveViewDate(value, "weeks")`
+- StepMonth     `moveViewDate(value, "months")`
+- StepYear      `moveViewDate(value, "years")`
+- StepDecade    `moveViewDate(value, "decades")`
