@@ -22,7 +22,7 @@
     "cross-env": "^7.0.2",
     "css-loader": "^3.5.2",
     "eslint": "^5.8.0",
-    "eslint-plugin-vue": "^5.0.0",
+    "eslint-plugin-vue": "^6.2.2",
     "expect": "^25.3.0",
     "file-loader": "^6.0.0",
     "jsdom": "^16.2.2",
