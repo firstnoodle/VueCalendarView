@@ -11,10 +11,10 @@ The ambition is to make a renderless component.
 This is a short first stab at listing what it would expose.
 
 **Data**
-selectedDate - string | Date
-viewType - string
-viewDate - string
-viewData - array - based on current view name we would be able to render the grid appropriately 
+- selectedDate - string | Date
+- viewType - string
+- viewDate - string
+- viewData - array - based on current view name we would be able to render the grid appropriately 
 
 **Functions**
 SelectDate
