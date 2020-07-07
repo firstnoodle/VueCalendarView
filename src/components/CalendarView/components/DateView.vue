@@ -31,8 +31,7 @@
                         'is-inactive': col.inactive,
                         'is-current': col.current,
                     }"
-                    >{{ col.label }}</span
-                >
+                >{{ col.label }}</span>
             </div>
         </main>
     </div>
@@ -40,31 +39,31 @@
 
 <script>
 export default {
-    name: 'DateView',
+    name: "DateView",
     props: {
         dateGrid: {
             type: Array,
-            required: true,
+            required: true
         },
         month: {
             type: String,
-            required: true,
+            required: true
         },
         year: {
             type: Number,
-            required: true,
+            required: true
         },
         weekdays: {
             type: Array,
-            required: true,
-        },
+            required: true
+        }
     },
     methods: {
         onDateClick(date) {
             if (!date.disabled) {
-                this.$emit('changeDate', date.date);
+                this.$emit("changeDate", date.date);
             }
-        },
-    },
+        }
+    }
 };
 </script>
