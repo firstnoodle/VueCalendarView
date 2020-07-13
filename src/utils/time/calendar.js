@@ -114,11 +114,19 @@ export class Calendar {
     }
 
     /**
-     * Add {n} years to the dateCursor
+     * Add {n} days to the dateCursor
      * @param {Integer} years
      */
-    addYearsToDateCursor(years) {
-        this.dateCursor.setYear(this.dateCursor.getUTCFullYear() + years);
+    addDaysToDateCursor(days) {
+        this.dateCursor.setUTCDate(this.dateCursor.getUTCDate() + days);
+    }
+
+    /**
+     * Add {n} weeks to the dateCursor
+     * @param {Integer} weeks
+     */
+    addWeeksToDateCursor(weeks) {
+        this.addDaysToDateCursor(weeks * 7);
     }
 
     /**
@@ -143,20 +151,11 @@ export class Calendar {
     }
 
     /**
-     * Add {n} weeks to the dateCursor
+     * Add {n} years to the dateCursor
      * @param {Integer} years
      */
-    addWeeksToDateCursor(weeks) {
-        // @todo
-        console.log('todo: addWeeksToDateCursor');
-    }
-
-    /**
-     * Add {n} days to the dateCursor
-     * @param {Integer} years
-     */
-    addDaysToDateCursor(days) {
-        this.dateCursor.setUTCDate(this.dateCursor.getUTCDate() + days);
+    addYearsToDateCursor(years) {
+        this.dateCursor.setYear(this.dateCursor.getUTCFullYear() + years);
     }
 
     /**
@@ -230,6 +229,10 @@ export class Calendar {
         return monthList;
     }
 
+    getDateCursorMonthName() {
+        return MONTHS[this.dateCursor.getUTCMonth()];
+    }
+
     /**
      * Get years in the decade that the dateCursor is in
      * @returns {Array} of 10 years
@@ -248,10 +251,10 @@ export class Calendar {
     }
 
     /**
-     * Try to move dateCursor in specific direction
+     * Try to move selectedDate in specific direction
      * @returns {void}
      */
-    moveDateCursor(direction) {
+    moveSelectedDate(direction) {
         let tempDate = new Date(Date.UTC(this.selectedDate.getUTCFullYear(), this.selectedDate.getUTCMonth(), this.selectedDate.getUTCDate()));
         switch (direction) {
             case 'up':
@@ -293,6 +296,14 @@ export class Calendar {
                 this.selectedDate.getUTCDate()
             )
         );
+    }
+
+    /**
+     * Set date of the dateCursor
+     * @returns {void}
+     */
+    setDateCursorDate(date) {
+        this.dateCursor.setUTCDate(date);
     }
 
     /**
