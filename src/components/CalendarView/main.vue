@@ -149,7 +149,7 @@ export default {
 
         moveRequest(direction) {
             // TODO: create eventListener for calendar
-            this.calendar.moveDateCursor(direction);
+            this.calendar.moveSelectedDate(direction);
 
             // change back to DateView (if on month or year)
             if (this.currentView !== DateView) {
