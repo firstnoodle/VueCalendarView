@@ -137,6 +137,13 @@ export default Vue.component('renderless-calendar', {
             this.updateView();
         },
 
+        /**
+         * Set viewDate and change view afterwards
+         * @param {Number} value
+         * @param {String} unit
+         * @param {String} view
+         * @returns {void}
+         */
         setViewDateAndChangeView(value, unit, view) {
             this.setViewDate(value, unit);
             this.changeView(view);
