@@ -11,7 +11,7 @@
                     <nav-button icon="double-left" @click="moveViewDate(-1, 'YEAR')" />
                     <nav-button icon="single-left" @click="moveViewDate(-1, 'MONTH')" />
                     <div class="col-span-3 flex justify-center">
-                        <button class="inline-flex items-center h-8 text-blue-600 mr-1" @click="changeView('YEAR')">{{ viewMonth }}</button>
+                        <button class="inline-flex items-center h-8 text-blue-600 mr-1" @click="changeView('YEAR')">{{ viewMonth.slice(0,3) }}</button>
                         <button
                             class="inline-flex items-center h-8 text-blue-600"
                             @click="changeView('DECADE')"
