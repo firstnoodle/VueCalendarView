@@ -81,6 +81,22 @@ export default Vue.component('renderless-calendar', {
         },
 
         /**
+         * 
+         * @param {String} direction 
+         */
+        moveRequest(direction) {
+            // TODO: create eventListener for calendar
+            this.calendar.moveSelectedDate(direction);
+
+            // change back to DateView (if on month or year)
+            if (this.viewType !== MONTH) {
+                this.changeView(VIEW_TYPES.DATE);
+            } else {
+                this.updateView();
+            }
+        },
+
+        /**
          * Move viewDate (or parts of viewDate: date, month, year) by specified amount
          * @param {Number} value
          * @param {String} unit
@@ -166,6 +182,7 @@ export default Vue.component('renderless-calendar', {
             viewType: this.viewType,
             viewMonth: this.calendar.getDateCursorMonthName(),
             changeView: this.changeView,
+            moveRequest: this.moveRequest,
             moveViewDate: this.moveViewDate,
             setViewDate: this.setViewDate,
             setViewDateAndChangeView: this.setViewDateAndChangeView,
