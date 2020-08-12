@@ -7,7 +7,7 @@ const COLUMN_COUNT = 7;
 const ROW_COUNT = 6;
 const CELL_COUNT = COLUMN_COUNT * ROW_COUNT;
 
-const MONTHS = [
+export const MONTHS = [
     'January',
     'February',
     'March',
@@ -22,7 +22,7 @@ const MONTHS = [
     'December',
 ];
 
-const WEEKDAYS = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
+export const WEEKDAYS = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
 
 /**
  * Modulo function that works with negative numbers as well
