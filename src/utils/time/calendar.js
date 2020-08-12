@@ -1,4 +1,5 @@
 import { datesAreEqual, dateIsValid, getDecade, moveDate, parseDate, printDate } from './dates.js';
+import { loopRange } from '../array';
 
 /**
  * Values for a classic calendar date grid
@@ -23,15 +24,6 @@ export const MONTHS = [
 ];
 
 export const WEEKDAYS = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
-
-/**
- * Modulo function that works with negative numbers as well
- * So fx passing -3 to a 0-9 range (length=10) would yield 7
- * @param {Integer} index
- * @param {Integer} length
- * @returns {Integer}
- */
-const loopRange = (index, length) => ((index % length) + length) % length;
 
 /**
  * Premade disable-function to disable weekend (saturday and sunday)
