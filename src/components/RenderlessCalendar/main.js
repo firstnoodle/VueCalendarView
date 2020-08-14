@@ -29,7 +29,7 @@ export default Vue.component('renderless-calendar', {
             calendar: null,
             now: new Date(),
             viewData: [],
-            viewType: VIEW_TYPES.YEAR,
+            viewType: VIEW_TYPES.MONTH,
         }
     },
 
@@ -81,7 +81,7 @@ export default Vue.component('renderless-calendar', {
         },
 
         /**
-         * 
+         * Request to move selectedDate a certain
          * @param {String} direction 
          */
         moveRequest(direction) {
