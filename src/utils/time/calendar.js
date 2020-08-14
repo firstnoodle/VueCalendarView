@@ -1,4 +1,4 @@
-import { datesAreEqual, dateIsValid, getDecade, moveDate, parseDate, printDate } from './dates.js';
+import { datesAreEqual, dateIsValid, getDecade, moveDate, parseDate } from './dates.js';
 import { loopRange } from '../array';
 
 /**
