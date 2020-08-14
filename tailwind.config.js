@@ -3,6 +3,9 @@ module.exports = {
   theme: {
     extend: {},
   },
-  variants: {},
+  variants: {
+    'boxShadow': ['focus', 'focus-within'],
+    'borderColor': ['focus', 'focus-within']
+  },
   plugins: [],
 }
